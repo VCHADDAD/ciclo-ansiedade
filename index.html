@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>O Ciclo da Ansiedade</title>
+<meta name="description" content="Documento interativo do Jornal Mental: por que evitar alimenta a ansiedade e o que acontece quando enfrentamos.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f7f4ee; --surface:#ffffff; --ink:#1f2328; --muted:#5d6470; --line:#e3ddd2;
+  --accent:#2f6f6a; --accent-soft:#d9ebe8; --warn:#b5543c; --warn-soft:#f6e0d8; --ghost:#b9c7c5;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#15181b; --surface:#1e2226; --ink:#eceae6; --muted:#a3a9b1; --line:#30363c;
+    --accent:#6fbfb6; --accent-soft:#1f3836; --warn:#e58a70; --warn-soft:#3d2620; --ghost:#3f5553;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#15181b; --surface:#1e2226; --ink:#eceae6; --muted:#a3a9b1; --line:#30363c;
+  --accent:#6fbfb6; --accent-soft:#1f3836; --warn:#e58a70; --warn-soft:#3d2620; --ghost:#3f5553;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 Inter,system-ui,sans-serif}
+main{max-width:760px;margin:0 auto;padding:40px 16px 64px}
+.kicker{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:600}
+h1{font-family:Fraunces,Georgia,serif;font-size:clamp(32px,7vw,48px);line-height:1.1;margin:8px 0 16px}
+h2{font-family:Fraunces,Georgia,serif;font-size:26px;margin:48px 0 8px}
+p{margin:0 0 14px}
+.lead{font-size:18px;color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;margin-top:16px}
+.controls{display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin-bottom:12px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.seg button{border:0;background:transparent;color:var(--ink);padding:8px 16px;font:inherit;font-size:14px;cursor:pointer}
+.seg button.on{background:var(--accent);color:#fff}
+.seg button.on.avoid{background:var(--warn)}
+label.range{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted)}
+input[type=range]{accent-color:var(--accent);width:140px}
+svg{width:100%;height:auto;display:block}
+.axis{stroke:var(--line)} .tick{fill:var(--muted);font-size:11px}
+.note{font-size:15px;padding:12px 14px;border-radius:10px;background:var(--accent-soft);margin-top:12px}
+.note.avoid{background:var(--warn-soft)}
+.cycle{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.cycle button{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:10px 14px;font:inherit;font-size:14px;font-weight:500;cursor:pointer}
+.cycle button.on{border-color:var(--warn);background:var(--warn-soft)}
+.arrow{color:var(--muted)}
+.loop{font-size:13px;color:var(--muted);margin-top:8px}
+.q{margin-bottom:20px}
+.q p{font-weight:600;margin-bottom:8px}
+.opt{display:block;width:100%;text-align:left;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:10px 14px;margin:6px 0;font:inherit;font-size:15px;cursor:pointer}
+.opt.right{border-color:var(--accent);background:var(--accent-soft)}
+.opt.wrong{border-color:var(--warn);background:var(--warn-soft)}
+.fb{font-size:14px;color:var(--muted)}
+footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<main>
+  <div class="kicker">Jornal Mental · Documento interativo</div>
+  <h1>O ciclo da ansiedade</h1>
+  <p class="lead">Por que fugir do que dá medo traz alívio na hora, mas faz a ansiedade crescer com o tempo. E o que muda quando a gente fica.</p>
+
+  <h2>1. Evitar ou enfrentar?</h2>
+  <p>O gráfico mostra a intensidade da ansiedade (de 0 a 100) ao longo de uma situação temida. Compare as duas escolhas e veja o que acontece quando a situação se repete.</p>
+  <div class="card">
+    <div class="controls">
+      <div class="seg" role="group" aria-label="Escolha">
+        <button id="bAvoid" class="avoid">Evitar / fugir</button>
+        <button id="bFace" class="on">Enfrentar e permanecer</button>
+      </div>
+      <label class="range">Vez nº <input id="n" type="range" min="1" max="5" value="1"> <strong id="nv">1</strong></label>
+    </div>
+    <svg id="chart" viewBox="0 0 600 300" role="img" aria-label="Curva de ansiedade ao longo do tempo"></svg>
+    <div id="note" class="note"></div>
+  </div>
+
+  <h2>2. Como o ciclo se mantém</h2>
+  <p>Toque em cada etapa para entender o papel dela.</p>
+  <div class="card">
+    <div class="cycle" id="cycle"></div>
+    <div class="loop">↺ e o ciclo recomeça, cada vez mais forte</div>
+    <div id="cnote" class="note avoid" style="display:none"></div>
+  </div>
+
+  <h2>3. Teste rápido</h2>
+  <div class="card" id="quiz"></div>
+
+  <footer>
+    Conteúdo educativo do canal Jornal Mental. Não substitui avaliação ou tratamento. A exposição terapêutica funciona melhor quando planejada com um profissional, de forma gradual. Curvas ilustrativas, não dados reais.
+  </footer>
+</main>
+
+<script>
+(function(){
+  const W=600,H=300,P={l:40,r:14,t:14,b:34};
+  const X=t=>P.l+(t/60)*(W-P.l-P.r), Y=v=>P.t+(1-v/100)*(H-P.t-P.b);
+  const base=15, tp=10;
+  const g=t=>(t/tp)*Math.exp(1-t/tp);
+  const facePeak=n=>Math.max(32,85*Math.pow(0.8,n-1));
+  const avoidPeak=n=>Math.min(96,82+3.5*(n-1));
+  function face(n){const pk=facePeak(n),a=[];for(let t=0;t<=60;t++)a.push([t,base+(pk-base)*g(t)]);return a}
+  function avoid(n){const pk=avoidPeak(n),a=[];for(let t=0;t<=8;t++)a.push([t,base+(pk-base)*g(t)]);
+    const v8=a[a.length-1][1];for(let t=9;t<=11;t++)a.push([t,v8-(v8-10)*(t-8)/3]);for(let t=12;t<=60;t++)a.push([t,10]);return a}
+  const path=a=>a.map((p,i)=>(i?'L':'M')+X(p[0]).toFixed(1)+' '+Y(p[1]).toFixed(1)).join(' ');
+  let mode='face',n=1;
+  const svg=document.getElementById('chart'),note=document.getElementById('note');
+  function draw(){
+    const cs=getComputedStyle(document.documentElement);
+    const col=mode==='face'?cs.getPropertyValue('--accent'):cs.getPropertyValue('--warn');
+    let s='';
+    [0,25,50,75,100].forEach(v=>{s+=`<line class="axis" x1="${P.l}" x2="${W-P.r}" y1="${Y(v)}" y2="${Y(v)}"/><text class="tick" x="${P.l-8}" y="${Y(v)+4}" text-anchor="end">${v}</text>`});
+    [0,15,30,45,60].forEach(t=>{s+=`<text class="tick" x="${X(t)}" y="${H-12}" text-anchor="middle">${t} min</text>`});
+    for(let k=1;k<n;k++){const a=mode==='face'?face(k):avoid(k);s+=`<path d="${path(a)}" fill="none" stroke="var(--ghost)" stroke-width="2"/>`}
+    const a=mode==='face'?face(n):avoid(n);
+    s+=`<path d="${path(a)}" fill="none" stroke="${col}" stroke-width="3.5" stroke-linecap="round"/>`;
+    if(mode==='avoid'){s+=`<text x="${X(12)+6}" y="${Y(30)}" class="tick" style="fill:${col};font-weight:600">fuga → alívio imediato</text>`}
+    svg.innerHTML=s;
+    const pk=Math.round(mode==='face'?facePeak(n):avoidPeak(n));
+    if(mode==='face'){
+      note.className='note';
+      note.innerHTML=n===1
+        ?`<strong>Pico: ${pk}.</strong> A ansiedade sobe, atinge um pico e, se a pessoa permanece, tende a baixar sozinha. O corpo não sustenta o alarme máximo por muito tempo.`
+        :`<strong>Pico: ${pk}.</strong> A cada repetição o pico tende a ser menor (curvas cinza = vezes anteriores). O cérebro aprende que o perigo previsto não se confirmou.`;
+    }else{
+      note.className='note avoid';
+      note.innerHTML=`<strong>Pico: ${pk}.</strong> Fugir derruba a ansiedade na hora, e esse alívio é poderoso. ${n>1?'Mas repare: nas vezes seguintes o pico não cai, pode até subir.':'O problema aparece nas próximas vezes, arraste o controle.'} O cérebro conclui: “só escapei porque fugi”.`;
+    }
+  }
+  const bA=document.getElementById('bAvoid'),bF=document.getElementById('bFace');
+  bA.onclick=()=>{mode='avoid';bA.classList.add('on');bF.classList.remove('on');draw()};
+  bF.onclick=()=>{mode='face';bF.classList.add('on');bA.classList.remove('on');draw()};
+  const r=document.getElementById('n');r.oninput=()=>{n=+r.value;document.getElementById('nv').textContent=n;draw()};
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',draw);
+  draw();
+
+  const steps=[
+    ['Gatilho','Uma situação, lugar, sensação no corpo ou pensamento sinaliza perigo, mesmo quando o risco real é baixo.'],
+    ['Ansiedade','O sistema de alarme dispara: coração acelera, respiração muda, a mente prevê o pior. É desconfortável, mas não é perigoso.'],
+    ['Evitação','Fugir, não ir, pedir que alguém vá junto, checar repetidamente. Inclui evitações sutis, chamadas de comportamentos de segurança.'],
+    ['Alívio','A ansiedade cai rapidamente. Esse alívio funciona como recompensa e reforça a evitação.'],
+    ['Crença mantida','A previsão catastrófica nunca é testada. A situação continua parecendo perigosa, e o próximo gatilho chega mais forte.']
+  ];
+  const cy=document.getElementById('cycle'),cn=document.getElementById('cnote');
+  steps.forEach((st,i)=>{
+    const b=document.createElement('button');b.textContent=st[0];
+    b.onclick=()=>{cy.querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');cn.style.display='block';cn.innerHTML=`<strong>${st[0]}.</strong> ${st[1]}`};
+    cy.appendChild(b);
+    if(i<steps.length-1){const s=document.createElement('span');s.className='arrow';s.textContent='→';cy.appendChild(s)}
+  });
+
+  const qs=[
+    {q:'Por que a evitação é tão difícil de largar?',o:['Porque a pessoa não tem força de vontade','Porque traz alívio imediato, que reforça o comportamento','Porque a ansiedade nunca diminui sozinha'],c:1,e:'O alívio rápido funciona como recompensa. O custo só aparece depois.'},
+    {q:'Na exposição, o que mais importa para o aprendizado?',o:['Que a ansiedade chegue a zero antes de sair','Testar a previsão temida e ver que ela não se confirma','Fazer tudo de uma vez, no nível máximo'],c:1,e:'Pesquisas recentes sobre aprendizagem inibitória sugerem que violar a expectativa de perigo pesa mais do que a ansiedade baixar dentro da sessão.'},
+    {q:'Levar sempre um calmante “por via das dúvidas” para sair de casa é:',o:['Um possível comportamento de segurança','Sempre a melhor estratégia','Irrelevante para o ciclo'],c:0,e:'Pode virar evitação sutil: a pessoa atribui ter ficado bem ao objeto, não a si mesma. Vale discutir com quem acompanha o tratamento.'}
+  ];
+  const qz=document.getElementById('quiz');
+  qs.forEach(it=>{
+    const d=document.createElement('div');d.className='q';d.innerHTML=`<p>${it.q}</p>`;
+    const fb=document.createElement('div');fb.className='fb';
+    it.o.forEach((t,j)=>{const b=document.createElement('button');b.className='opt';b.textContent=t;
+      b.onclick=()=>{d.querySelectorAll('.opt').forEach((x,k)=>{x.classList.remove('right','wrong');if(k===it.c)x.classList.add('right')});
+        if(j!==it.c)b.classList.add('wrong');fb.textContent=(j===it.c?'Isso. ':'Não exatamente. ')+it.e};
+      d.appendChild(b)});
+    d.appendChild(fb);qz.appendChild(d);
+  });
+})();
+</script>
+</body>
+</html>
